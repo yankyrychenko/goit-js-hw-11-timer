@@ -1,26 +1,30 @@
-const countdownDate = new Date('Feb 01, 2021').getTime();
+const dayRef = document.querySelector('span[data-value="days"]');
+const hourRef = document.querySelector('span[data-value="hours"]');
+const minRef = document.querySelector('span[data-value="mins"]');
+const secRef = document.querySelector('span[data-value="secs"]');
 
-let id = setInterval(function () {
-  let now = new Date().getTime();
-  let time = countdownDate - now;
+const targetDate = new Date('March 01, 2021');
 
-  const days = Math.floor(time / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const mins = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
-  const secs = Math.floor((time % (1000 * 60)) / 1000);
-
-  const refs = {
-    day: (document.querySelector('[data-value="days"]').textContent = days),
-    hour: (document.querySelector('[data-value="hours"]').textContent = hours),
-    min: (document.querySelector('[data-value="mins"]').textContent = mins),
-    sec: (document.querySelector('[data-value="secs"]').textContent = secs),
-  };
-
-  if (time <= 0) {
-    clearInterval(id);
-    refs.day.textContent = 0;
-    refs.hour.textContent = 0;
-    refs.min.textContent = 0;
-    refs.sec.textContent = 0;
-  }
+const toTargetDate = setInterval(() => {
+  const dateNow = new Date();
+  const remainingTime = targetDate - dateNow;
+  countdown(remainingTime);
 }, 1000);
+
+function countdown(time) {
+  const days = pad(Math.floor(time / (1000 * 60 * 60 * 24)));
+  const hours = pad(
+    Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+  );
+  const mins = pad(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)));
+  const secs = pad(Math.floor((time % (1000 * 60)) / 1000));
+
+  dayRef.textContent = days;
+  hourRef.textContent = hours;
+  minRef.textContent = mins;
+  secRef.textContent = secs;
+}
+
+function pad(value) {
+  return String(value).padStart(2, '0');
+}
